@@ -93,7 +93,7 @@ function ItemNode(props: ItemNodeProps): JSX.Element {
           handleAttributeInItemSlider={handleAttributeInItemSlider}
         />
       ))}
-      <h3>Total: {itemTotal}</h3>
+      <h3>Total: {Math.round(itemTotal * 10) / 10}</h3>
     </>
   );
 }
