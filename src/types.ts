@@ -17,8 +17,9 @@ export interface Item {
 export interface AttributeInItemProps {
   id: string;
   name: string;
-  itemAttributePairs: ItemAttributePair[];
+  // itemAttributePairs: ItemAttributePair[];
   itemId: string;
+  handleAttributeInItemSlider: Function;
 }
 
 export interface ItemAttributePair {

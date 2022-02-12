@@ -33,8 +33,9 @@ function ItemNode(props: ItemNodeProps): JSX.Element {
       const weighting =
         attributes[
           attributes.findIndex((attribute) => attribute.id === attributeId)
-        ].weighting;
+        ].weighting / 100;
       const weightedValue = value * weighting;
+      console.log(weighting, value);
       return weightedValue;
     }
 
@@ -63,6 +64,22 @@ function ItemNode(props: ItemNodeProps): JSX.Element {
     });
   }, [itemAttributePairs, attributes, props.itemId, setItems]);
 
+  function handleAttributeInItemSlider(id: string, selectedValue: number) {
+    props.setItemAttributePairs((arr) => {
+      const newArr = [...arr];
+      for (let element of newArr) {
+        if (element.attributeId === id && element.itemId === props.itemId) {
+          const newChoice = {
+            ...element,
+            value: selectedValue,
+          };
+          newArr[newArr.indexOf(element)] = newChoice;
+        }
+      }
+      return newArr;
+    });
+  }
+
   console.log(attributes);
   return (
     <>
@@ -72,8 +89,8 @@ function ItemNode(props: ItemNodeProps): JSX.Element {
           key={attribute.id}
           id={attribute.id}
           name={attribute.name}
-          itemAttributePairs={itemAttributePairs}
           itemId={props.itemId}
+          handleAttributeInItemSlider={handleAttributeInItemSlider}
         />
       ))}
       <h3>Total: {itemTotal}</h3>
