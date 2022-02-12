@@ -62,7 +62,7 @@ function MainContent() {
     const element = {
       id: newId,
       data: {
-        label: <ItemNode name={itemName} />,
+        label: <ItemNode name={itemName} attributes={attributes} />,
       },
       position: {
         x: 100 + items.length * 250,
@@ -86,7 +86,8 @@ function MainContent() {
   return (
     <>
       <div className="options">
-        <h2>What attributes do you value?</h2>
+        {/* Currently have to choose all attributes before adding items as items not rerendering */}
+        <h2>1. What attributes do you value?</h2>
         <input
           type="text"
           value={attributeName}
@@ -94,7 +95,7 @@ function MainContent() {
           placeholder="E.g. Tastiness"
         />
         <button onClick={() => handleCreateAttributeNode()}>Submit</button>
-        <h2>What items do you want to compare?</h2>
+        <h2>2. What items do you want to compare?</h2>
         <input
           type="text"
           value={itemName}

@@ -9,3 +9,8 @@ export interface Item {
   name: string;
   total: number;
 }
+
+export interface AttributeInItemProps {
+  id: string;
+  name: string;
+}
