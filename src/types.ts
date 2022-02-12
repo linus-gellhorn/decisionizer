@@ -4,6 +4,10 @@ export interface Attribute {
   weighting: number;
 }
 
+export interface AttributeNodeProps extends Attribute {
+  handleAttributeSlider: Function;
+}
+
 export interface Item {
   id: string;
   name: string;
@@ -13,6 +17,8 @@ export interface Item {
 export interface AttributeInItemProps {
   id: string;
   name: string;
+  itemAttributePairs: ItemAttributePair[];
+  itemId: string;
 }
 
 export interface ItemAttributePair {

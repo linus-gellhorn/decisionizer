@@ -1,11 +1,11 @@
 import { Attribute, ItemAttributePair, Item } from "../types";
 import AttributeInItem from "./AttributeInItem";
-import { useState, useEffect } from "react";
-import sumWeightedAttributes from "../utils/sumWeightedAttributes";
+import { useState, useEffect, useContext } from "react";
+import { AttributesContext, ItemAttributePairsContext } from "./MainContent";
 
 interface ItemNodeProps {
   name: string;
-  attributes: Attribute[];
+  // attributes: Attribute[];
   itemAttributePairs: ItemAttributePair[];
   setItemAttributePairs: React.Dispatch<
     React.SetStateAction<ItemAttributePair[]>
@@ -16,14 +16,37 @@ interface ItemNodeProps {
 
 function ItemNode(props: ItemNodeProps): JSX.Element {
   const [itemTotal, setItemTotal] = useState(0);
-
-  const itemAttributePairs = props.itemAttributePairs;
+  const itemAttributePairs = useContext(ItemAttributePairsContext);
+  const attributes = useContext(AttributesContext);
+  // const itemAttributePairs = props.itemAttributePairs;
   const setItems = props.setItems;
 
   useEffect(() => {
-    // sumWeightedAttributes();
+    function calculateWeightedAttributes(attributeId: string) {
+      const value =
+        itemAttributePairs[
+          itemAttributePairs.findIndex(
+            (pair) =>
+              pair.itemId === props.itemId && pair.attributeId === attributeId
+          )
+        ].value;
+      const weighting =
+        attributes[
+          attributes.findIndex((attribute) => attribute.id === attributeId)
+        ].weighting;
+      const weightedValue = value * weighting;
+      return weightedValue;
+    }
 
-    const total = sumWeightedAttributes(props.attributes);
+    function sumWeightedAttributes(attributes: Attribute[]) {
+      let sum = 0;
+      for (let attribute of attributes) {
+        sum += calculateWeightedAttributes(attribute.id);
+      }
+      return sum;
+    }
+
+    const total = sumWeightedAttributes(attributes);
     setItemTotal(total);
     setItems((arr) => {
       const copyArr = [...arr];
@@ -38,17 +61,19 @@ function ItemNode(props: ItemNodeProps): JSX.Element {
       }
       return copyArr;
     });
-  }, [itemAttributePairs, props.attributes, props.itemId, setItems]);
+  }, [itemAttributePairs, attributes, props.itemId, setItems]);
 
-  // console.log(props.attributes);
+  console.log(attributes);
   return (
     <>
       <h3>{props.name}</h3>
-      {props.attributes.map((attribute) => (
+      {attributes.map((attribute) => (
         <AttributeInItem
           key={attribute.id}
           id={attribute.id}
           name={attribute.name}
+          itemAttributePairs={itemAttributePairs}
+          itemId={props.itemId}
         />
       ))}
       <h3>Total: {itemTotal}</h3>

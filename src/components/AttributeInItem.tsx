@@ -2,7 +2,13 @@ import { useState } from "react";
 import { AttributeInItemProps } from "../types";
 
 export default function AttributeInItem(props: AttributeInItemProps) {
-  const [attributeInItemValue, setAttributeInItemValue] = useState(50);
+  const ItemIndex = props.itemAttributePairs.findIndex(
+    (pair) => pair.attributeId === props.id && pair.itemId === props.itemId
+  );
+  const initialAttributeValue = props.itemAttributePairs[ItemIndex].value;
+  const [attributeInItemValue, setAttributeInItemValue] = useState(
+    initialAttributeValue
+  );
 
   return (
     <>

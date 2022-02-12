@@ -1,8 +1,13 @@
 import ReactFlow from "react-flow-renderer";
 import AttributeNode from "./AttributeNode";
-import { useState } from "react";
+import React, { useState } from "react";
 import { Attribute, Item, ItemAttributePair } from "../types";
 import ItemNode from "./ItemNode";
+
+export const AttributesContext = React.createContext<Attribute[]>([]);
+export const ItemAttributePairsContext = React.createContext<
+  ItemAttributePair[]
+>([]);
 
 function MainContent() {
   const winningItem = {
@@ -22,6 +27,28 @@ function MainContent() {
     ItemAttributePair[]
   >([]);
 
+  function addNewItemAttributePairs(attributeId: string) {
+    const arrOfItemIds = elements
+      .filter((element) => element.type === "default")
+      .map((element) => element.id);
+    for (let itemId of arrOfItemIds) {
+      setItemAttributePairs((arr) =>
+        arr.concat({ itemId: itemId, attributeId: attributeId, value: 50 })
+      );
+    }
+  }
+
+  function addNewPairsAttribute(itemId: string) {
+    const arrOfAttributeIds = elements
+      .filter((element) => element.type === "input")
+      .map((element) => element.id);
+    for (let attributeId of arrOfAttributeIds) {
+      setItemAttributePairs((arr) =>
+        arr.concat({ itemId: itemId, attributeId: attributeId, value: 50 })
+      );
+    }
+  }
+
   function handleCreateAttributeNode() {
     const newId = (id + 1).toString();
     setId(id + 1);
@@ -35,6 +62,7 @@ function MainContent() {
             name={attributeName}
             id={newId}
             weighting={0.5} // placeholder
+            handleAttributeSlider={handleAttributeSlider}
           />
         ),
       },
@@ -53,6 +81,8 @@ function MainContent() {
     setElements([...elements, element]);
     setAttributes([...attributes, attribute]);
     setAttributeName("");
+    addNewItemAttributePairs(newId);
+
     // console.log(elements);
     // console.log(attributes);
     // console.log(id);
@@ -64,11 +94,12 @@ function MainContent() {
 
     const element = {
       id: newId,
+      type: "default",
       data: {
         label: (
           <ItemNode
             name={itemName}
-            attributes={attributes}
+            // attributes={attributes}
             itemAttributePairs={itemAttributePairs}
             setItemAttributePairs={setItemAttributePairs}
             itemId={newId}
@@ -91,6 +122,23 @@ function MainContent() {
     setElements([...elements, element]);
     setItemName("");
     setItems([...items, item]);
+    addNewPairsAttribute(newId);
+  }
+
+  function handleAttributeSlider(id: string, newWeighting: number) {
+    setAttributes((arr) => {
+      const newArr = [...arr];
+      for (let attribute of newArr) {
+        if (attribute.id === id) {
+          const updatedAtt = {
+            ...attribute,
+            weighting: newWeighting,
+          };
+          newArr[newArr.indexOf(attribute)] = updatedAtt;
+        }
+      }
+      return newArr;
+    });
   }
 
   const flowStyles = { height: 600 };
@@ -118,7 +166,11 @@ function MainContent() {
       </div>
       <br />
       <div className="flowchart">
-        <ReactFlow elements={elements} style={flowStyles} />
+        <AttributesContext.Provider value={attributes}>
+          <ItemAttributePairsContext.Provider value={itemAttributePairs}>
+            <ReactFlow elements={elements} style={flowStyles} />
+          </ItemAttributePairsContext.Provider>
+        </AttributesContext.Provider>
       </div>
     </>
   );
