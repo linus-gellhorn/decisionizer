@@ -3,3 +3,9 @@ export interface Attribute {
   name: string;
   weighting: number;
 }
+
+export interface Item {
+  id: string;
+  name: string;
+  total: number;
+}
