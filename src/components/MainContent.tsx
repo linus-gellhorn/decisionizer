@@ -1,5 +1,5 @@
 import ReactFlow from "react-flow-renderer";
-import { items, attributes } from "./dummyData";
+import { items, attributes } from "../dummyData";
 import AttributeNode from "./AttributeNode";
 import ItemNode from "./ItemNode";
 
@@ -63,6 +63,7 @@ function MainContent() {
     { id: "e3-2", source: "3", target: "2", animated: true },
     {
       id: "5",
+      type: "output",
       data: { label: "Winner: ?" },
       position: { x: 400, y: 400 },
     },
@@ -73,9 +74,9 @@ function MainContent() {
   const flowStyles = { height: 600 };
 
   return (
-    <>
+    <div className="flowchart">
       <ReactFlow elements={elements} style={flowStyles} />
-    </>
+    </div>
   );
 }
 
