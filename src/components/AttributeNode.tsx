@@ -1,13 +1,19 @@
-interface AttributeNodeProps {
-  name: string;
-  weighting: number;
-}
+import { useState } from "react";
+import { Attribute } from "../types";
 
-function AttributeNode(props: AttributeNodeProps): JSX.Element {
+function AttributeNode(props: Attribute): JSX.Element {
+  const [weighting, setWeighting] = useState(50);
+
   return (
     <>
       <h3>{props.name}</h3>
-      <h4>Weighting: {props.weighting}</h4>
+      <input
+        type="range"
+        step="10"
+        value={weighting}
+        onChange={(e) => setWeighting(parseInt(e.target.value))}
+      />
+      <h4>Weighting: {weighting / 100}</h4>
     </>
   );
 }
