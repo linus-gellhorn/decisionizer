@@ -1,4 +1,5 @@
 interface AttributeNodeProps {
+  id: number;
   name: string;
   weighting: number;
 }
