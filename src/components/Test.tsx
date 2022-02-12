@@ -23,7 +23,7 @@ function Test() {
   };
 
   return (
-    <div>
+    <div className="options">
       <h2>What attributes do you value?</h2>
       <input
         value={attribute.name}

@@ -1,13 +1,13 @@
 import "./App.css";
-import MainContent from "./MainContent";
-import Test from "./Test";
+import MainContent from "./components/MainContent";
+import Test from "./components/Test";
 
 function App() {
   return (
     <>
       <h1>Decision Making Helper</h1>
       <Test />
-      {/* <MainContent /> */}
+      <MainContent />
     </>
   );
 }
