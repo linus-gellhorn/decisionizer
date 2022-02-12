@@ -1,7 +1,7 @@
 import ReactFlow from "react-flow-renderer";
 import AttributeNode from "./AttributeNode";
 import { useState } from "react";
-import { Attribute, Item } from "../types";
+import { Attribute, Item, ItemAttributePair } from "../types";
 import ItemNode from "./ItemNode";
 
 function MainContent() {
@@ -18,6 +18,9 @@ function MainContent() {
   const [attributes, setAttributes] = useState<Attribute[]>([]);
   const [itemName, setItemName] = useState("");
   const [items, setItems] = useState<Item[]>([]);
+  const [itemAttributePairs, setItemAttributePairs] = useState<
+    ItemAttributePair[]
+  >([]);
 
   function handleCreateAttributeNode() {
     const newId = (id + 1).toString();
@@ -62,7 +65,16 @@ function MainContent() {
     const element = {
       id: newId,
       data: {
-        label: <ItemNode name={itemName} attributes={attributes} />,
+        label: (
+          <ItemNode
+            name={itemName}
+            attributes={attributes}
+            itemAttributePairs={itemAttributePairs}
+            setItemAttributePairs={setItemAttributePairs}
+            itemId={newId}
+            setItems={setItems}
+          />
+        ),
       },
       position: {
         x: 100 + items.length * 250,

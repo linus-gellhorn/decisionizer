@@ -14,3 +14,9 @@ export interface AttributeInItemProps {
   id: string;
   name: string;
 }
+
+export interface ItemAttributePair {
+  itemId: string;
+  attributeId: string;
+  value: number;
+}
