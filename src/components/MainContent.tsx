@@ -1,22 +1,22 @@
 import ReactFlow from "react-flow-renderer";
-import { items, attributes } from "../dummyData";
 import AttributeNode from "./AttributeNode";
-import ItemNode from "./ItemNode";
 import { useState } from "react";
 import { Attribute } from "../types";
+import ItemNode from "./ItemNode";
 
 function MainContent() {
   const winningItem = {
     id: "0",
     type: "output",
     data: { label: "Winner" },
-    position: { x: 400, y: 400 },
+    position: { x: 400, y: 30 },
   };
 
   const [id, setId] = useState(1);
   const [elements, setElements] = useState<any[]>([winningItem]);
   const [attributeName, setAttributeName] = useState("");
   const [attributes, setAttributes] = useState<Attribute[]>([]);
+  const [itemName, setItemName] = useState("");
 
   function handleCreateAttributeNode() {
     const newId = (id + 1).toString();
@@ -35,10 +35,9 @@ function MainContent() {
         ),
       },
       position: {
-        x: 100 + (elements.length - 1) * 250,
+        x: 100 + attributes.length * 250,
         y: 100,
       },
-      style: { width: "150px" },
     };
 
     const attribute = {
@@ -55,6 +54,25 @@ function MainContent() {
     // console.log(id);
   }
 
+  function handleCreateItemNode() {
+    const newId = (id + 1).toString();
+    setId(id + 1);
+
+    const element = {
+      id: newId,
+      data: {
+        label: <ItemNode name={itemName} />,
+      },
+      position: {
+        x: 100, // + [items].length * 250
+        y: 300,
+      },
+    };
+
+    setElements([...elements, element]);
+    setItemName("");
+  }
+
   const flowStyles = { height: 600 };
 
   return (
@@ -68,6 +86,14 @@ function MainContent() {
           placeholder="E.g. Tastiness"
         />
         <button onClick={() => handleCreateAttributeNode()}>Submit</button>
+        <h2>What items do you want to compare?</h2>
+        <input
+          type="text"
+          value={itemName}
+          onChange={(e) => setItemName(e.target.value)}
+          placeholder="E.g. Pizza"
+        />
+        <button onClick={() => handleCreateItemNode()}>Submit</button>
       </div>
       <br />
       <div className="flowchart">
