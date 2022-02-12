@@ -1,5 +1,5 @@
 export interface Attribute {
-  id: number;
+  id: string;
   name: string;
   weighting: number;
 }

@@ -7,20 +7,20 @@ import { Attribute } from "../types";
 
 function MainContent() {
   const winningItem = {
-    id: "1",
+    id: "0",
     type: "output",
     data: { label: "Winner" },
     position: { x: 400, y: 400 },
   };
 
-  const [id, setId] = useState(0);
+  const [id, setId] = useState(1);
   const [elements, setElements] = useState<any[]>([winningItem]);
   const [attributeName, setAttributeName] = useState("");
   const [attributes, setAttributes] = useState<Attribute[]>([]);
 
   function handleCreateAttributeNode() {
-    const newId = id + 1;
-    setId(newId);
+    const newId = (id + 1).toString();
+    setId(id + 1);
 
     const element = {
       id: newId,
@@ -35,8 +35,8 @@ function MainContent() {
         ),
       },
       position: {
-        x: 200 + (elements.length - 1) * 250,
-        y: 200,
+        x: 100 + (elements.length - 1) * 250,
+        y: 100,
       },
       style: { width: "150px" },
     };
@@ -50,8 +50,9 @@ function MainContent() {
     setElements([...elements, element]);
     setAttributes([...attributes, attribute]);
     setAttributeName("");
-    console.log(elements);
-    console.log(attributes);
+    // console.log(elements);
+    // console.log(attributes);
+    // console.log(id);
   }
 
   const flowStyles = { height: 600 };

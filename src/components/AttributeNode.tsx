@@ -1,10 +1,6 @@
-interface AttributeNodeProps {
-  id: number;
-  name: string;
-  weighting: number;
-}
+import { Attribute } from "../types";
 
-function AttributeNode(props: AttributeNodeProps): JSX.Element {
+function AttributeNode(props: Attribute): JSX.Element {
   return (
     <>
       <h3>{props.name}</h3>
