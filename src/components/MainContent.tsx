@@ -3,7 +3,7 @@ import AttributeNode from "./AttributeNode";
 import ItemNode from "./ItemNode";
 import WinningNode from "./WinningNode";
 import React, { useState, useEffect, useReducer, ChangeEvent } from "react";
-import { Attribute, Item, ItemAttributePair, Edge, Action } from "../types";
+import { Attribute, Item, ItemAttributePair, Edge } from "../types";
 import findWinner from "../utils/findWinner";
 import createEdge from "../utils/createEdge";
 import { initialItemName, itemNameReducer } from "../utils/itemNameReducer";
