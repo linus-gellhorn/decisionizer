@@ -1,6 +1,6 @@
 import ReactFlow from "react-flow-renderer";
 import AttributeNode from "./AttributeNode";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Attribute, Item, ItemAttributePair } from "../types";
 import ItemNode from "./ItemNode";
 
@@ -9,16 +9,33 @@ export const ItemAttributePairsContext = React.createContext<
   ItemAttributePair[]
 >([]);
 
+// function WinningNode(props: {
+//   winner: string;
+//   setWinner: React.Dispatch<React.SetStateAction<string>>;
+// }) {
+//   useEffect(() => {
+//     props.setWinner(props.winner);
+//   }, [props.winner]);
+//   return (
+//     <>
+//       <h3>{props.winner}</h3>
+//     </>
+//   );
+// }
+
 function MainContent() {
-  const winningItem = {
+  const [winner, setWinner] = useState("");
+  // need to place this node above elements useState but below winning state
+  const winningNode = {
     id: "0",
     type: "output",
     data: { label: "Winner" },
-    position: { x: 400, y: 30 },
+    // data: { label: <WinningNode winner={winner} setWinner={setWinner} /> },
+    position: { x: 400, y: 550 },
   };
 
   const [id, setId] = useState(1);
-  const [elements, setElements] = useState<any[]>([winningItem]);
+  const [elements, setElements] = useState<any[]>([winningNode]);
   const [attributeName, setAttributeName] = useState("");
   const [attributes, setAttributes] = useState<Attribute[]>([]);
   const [itemName, setItemName] = useState("");
@@ -26,6 +43,16 @@ function MainContent() {
   const [itemAttributePairs, setItemAttributePairs] = useState<
     ItemAttributePair[]
   >([]);
+
+  useEffect(() => {
+    if (items.length >= 2) {
+      let winningItem = items.sort((a, b) => b.total - a.total)[0].name; // 27 chars time complexity:  O(nlogn)
+      console.log(winningItem);
+      setWinner(winningItem);
+    }
+  }, [items, setWinner]);
+
+  // console.log(items);
 
   function addNewItemAttributePairs(attributeId: string) {
     const arrOfItemIds = elements
@@ -68,7 +95,7 @@ function MainContent() {
       },
       position: {
         x: 100 + attributes.length * 250,
-        y: 100,
+        y: 50,
       },
     };
 
@@ -109,7 +136,7 @@ function MainContent() {
       },
       position: {
         x: 100 + items.length * 250,
-        y: 300,
+        y: 250,
       },
     };
 
@@ -141,30 +168,34 @@ function MainContent() {
     });
   }
 
-  const flowStyles = { height: 600 };
+  const flowStyles = { height: 700 };
 
   return (
     <>
       <div className="options">
-        {/* Currently have to choose all attributes before adding items as items not rerendering */}
-        <h2>1. What attributes do you value?</h2>
-        <input
-          type="text"
-          value={attributeName}
-          onChange={(e) => setAttributeName(e.target.value)}
-          placeholder="E.g. Tastiness"
-        />
-        <button onClick={() => handleCreateAttributeNode()}>Submit</button>
-        <h2>2. What items do you want to compare?</h2>
-        <input
-          type="text"
-          value={itemName}
-          onChange={(e) => setItemName(e.target.value)}
-          placeholder="E.g. Pizza"
-        />
-        <button onClick={() => handleCreateItemNode()}>Submit</button>
+        <div className="attributes">
+          <h2>What attributes do you value?</h2>
+          <input
+            type="text"
+            value={attributeName}
+            onChange={(e) => setAttributeName(e.target.value)}
+            placeholder="E.g. Tastiness"
+          />
+          <button onClick={() => handleCreateAttributeNode()}>Submit</button>
+        </div>
+        <div className="items">
+          <h2>What items do you want to compare?</h2>
+          <input
+            type="text"
+            value={itemName}
+            onChange={(e) => setItemName(e.target.value)}
+            placeholder="E.g. Pizza"
+          />
+          <button onClick={() => handleCreateItemNode()}>Submit</button>
+        </div>
       </div>
       <br />
+      <p>Winner: {winner}</p>
       <div className="flowchart">
         <AttributesContext.Provider value={attributes}>
           <ItemAttributePairsContext.Provider value={itemAttributePairs}>
