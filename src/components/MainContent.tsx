@@ -11,19 +11,10 @@ export const ItemAttributePairsContext = React.createContext<
   ItemAttributePair[]
 >([]);
 
-// function WinningNode(props: {
-//   winner: string;
-//   setWinner: React.Dispatch<React.SetStateAction<string>>;
-// }) {
-//   useEffect(() => {
-//     props.setWinner(props.winner);
-//   }, [props.winner]);
-//   return (
-//     <>
-//       <h3>{props.winner}</h3>
-//     </>
-//   );
-// }
+function WinningNode(props: { winner: string }) {
+  console.log("receiving: ", props.winner);
+  return <>{props.winner ? <h3>{props.winner}</h3> : <h3>???</h3>}</>;
+}
 
 function MainContent() {
   const [winner, setWinner] = useState("");
@@ -31,8 +22,7 @@ function MainContent() {
   const winningNode = {
     id: "0",
     type: "output",
-    data: { label: "Winner" },
-    // data: { label: <WinningNode winner={winner} setWinner={setWinner} /> },
+    data: { label: <WinningNode winner={winner} /> },
     position: { x: 400, y: 550 },
   };
 
@@ -95,6 +85,24 @@ function MainContent() {
         arr.concat({ itemId: itemId, attributeId: attributeId, value: 50 })
       );
     }
+  }
+
+  function handleGetWinner() {
+    const newId = (id + 1).toString();
+    setId(id + 1);
+
+    const element = {
+      id: newId,
+      type: "output",
+      data: { label: <WinningNode winner={winner} /> },
+      position: { x: 400, y: 550 },
+    };
+
+    setElements([...elements, element]);
+    // setElements([
+    //   ...elements.filter((element) => element.type !== "output"),
+    //   element,
+    // ]);
   }
 
   function handleCreateAttributeNode() {
@@ -204,7 +212,6 @@ function MainContent() {
             placeholder="E.g. Tastiness"
             onKeyPress={(e) => {
               if (e.key === "Enter") {
-                console.log("pressed");
                 handleCreateAttributeNode();
               }
             }}
@@ -220,7 +227,6 @@ function MainContent() {
             placeholder="E.g. Pizza"
             onKeyPress={(e) => {
               if (e.key === "Enter") {
-                console.log("pressed");
                 handleCreateItemNode();
               }
             }}
@@ -229,7 +235,9 @@ function MainContent() {
         </div>
       </div>
       <br />
-      <p>Winner: {winner}</p>
+      <button className="winning-button" onClick={handleGetWinner}>
+        Reveal winner!
+      </button>
       <div className="flowchart">
         <AttributesContext.Provider value={attributes}>
           <ItemAttributePairsContext.Provider value={itemAttributePairs}>
