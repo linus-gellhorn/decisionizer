@@ -1,31 +1,17 @@
 import ReactFlow from "react-flow-renderer";
 import AttributeNode from "./AttributeNode";
+import ItemNode from "./ItemNode";
+import WinningNode from "./WinningNode";
 import React, { useState, useEffect, useReducer, ChangeEvent } from "react";
 import { Attribute, Item, ItemAttributePair, Edge, Action } from "../types";
-import ItemNode from "./ItemNode";
 import findWinner from "../utils/findWinner";
 import createEdge from "../utils/createEdge";
+import { initialItemName, itemNameReducer } from "../utils/itemNameReducer";
 
 export const AttributesContext = React.createContext<Attribute[]>([]);
 export const ItemAttributePairsContext = React.createContext<
   ItemAttributePair[]
 >([]);
-
-function WinningNode(props: { winner: string }) {
-  return <>{props.winner ? <h3>{props.winner}</h3> : <h3>???</h3>}</>;
-}
-
-const initialItemName = "";
-const itemNameReducer = (attributeName: string, action: Action) => {
-  switch (action.type) {
-    case "update":
-      return action.payload;
-    case "resetItem":
-      return initialItemName;
-    default:
-      throw new Error(`Unknown action type`);
-  }
-};
 
 function MainContent() {
   const [itemName, itemDispatch] = useReducer(itemNameReducer, initialItemName);
