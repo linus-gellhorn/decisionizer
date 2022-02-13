@@ -5,7 +5,6 @@ import { AttributesContext, ItemAttributePairsContext } from "./MainContent";
 
 interface ItemNodeProps {
   name: string;
-  // attributes: Attribute[];
   itemAttributePairs: ItemAttributePair[];
   setItemAttributePairs: React.Dispatch<
     React.SetStateAction<ItemAttributePair[]>
@@ -16,10 +15,8 @@ interface ItemNodeProps {
 
 function ItemNode(props: ItemNodeProps): JSX.Element {
   const [itemTotal, setItemTotal] = useState(0);
-  // const [itemTotals, setItemTotals] = useState([0]);
   const itemAttributePairs = useContext(ItemAttributePairsContext);
   const attributes = useContext(AttributesContext);
-  // const itemAttributePairs = props.itemAttributePairs;
   const setItems = props.setItems;
 
   useEffect(() => {
@@ -36,7 +33,6 @@ function ItemNode(props: ItemNodeProps): JSX.Element {
           attributes.findIndex((attribute) => attribute.id === attributeId)
         ].weighting / 100;
       const weightedValue = value * weighting;
-      // console.log(weighting, value);
       return weightedValue;
     }
 
@@ -64,11 +60,7 @@ function ItemNode(props: ItemNodeProps): JSX.Element {
       return copyArr;
     });
     // setItemTotals([...itemTotals, total]);
-    // console.log(itemTotals);
-    // if (total > Math.max(...itemTotals)) {
-    //   console.log("winner: ", props.name);
-    // }
-    // console.log(props.name);
+    // if (total > Math.max(...itemTotals)) //=> X
   }, [itemAttributePairs, attributes, props.itemId, setItems]);
 
   function handleAttributeInItemSlider(id: string, selectedValue: number) {
@@ -89,7 +81,6 @@ function ItemNode(props: ItemNodeProps): JSX.Element {
 
   let roundedTotal = Math.round(itemTotal * 10) / 10;
 
-  // console.log(attributes);
   return (
     <>
       <h3>{props.name}</h3>
