@@ -196,7 +196,7 @@ function MainContent() {
     <>
       <div className="options">
         <div className="attributes">
-          <h2>What attributes do you value?</h2>
+          <h2>1. What attributes do you value?</h2>
           <input
             type="text"
             value={attributeName}
@@ -206,7 +206,7 @@ function MainContent() {
           <button onClick={() => handleCreateAttributeNode()}>Submit</button>
         </div>
         <div className="items">
-          <h2>What items do you want to compare?</h2>
+          <h2>2. What items do you want to compare?</h2>
           <input
             type="text"
             value={itemName}
