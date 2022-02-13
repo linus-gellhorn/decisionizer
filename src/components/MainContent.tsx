@@ -3,6 +3,7 @@ import AttributeNode from "./AttributeNode";
 import React, { useState, useEffect } from "react";
 import { Attribute, Item, ItemAttributePair } from "../types";
 import ItemNode from "./ItemNode";
+import findWinner from "../utils/findWinner";
 
 export const AttributesContext = React.createContext<Attribute[]>([]);
 export const ItemAttributePairsContext = React.createContext<
@@ -46,7 +47,7 @@ function MainContent() {
 
   useEffect(() => {
     if (items.length >= 2) {
-      let winningItem = items.sort((a, b) => b.total - a.total)[0].name; // 27 chars time complexity:  O(nlogn)
+      let winningItem = findWinner(items);
       console.log(winningItem);
       setWinner(winningItem);
     }
