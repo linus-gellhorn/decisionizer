@@ -1,7 +1,7 @@
 import ReactFlow from "react-flow-renderer";
 import AttributeNode from "./AttributeNode";
-import React, { useState, useEffect } from "react";
-import { Attribute, Item, ItemAttributePair, Edge } from "../types";
+import React, { useState, useEffect, useReducer, ChangeEvent } from "react";
+import { Attribute, Item, ItemAttributePair, Edge, Action } from "../types";
 import ItemNode from "./ItemNode";
 import findWinner from "../utils/findWinner";
 import createEdge from "../utils/createEdge";
@@ -16,7 +16,33 @@ function WinningNode(props: { winner: string }) {
   return <>{props.winner ? <h3>{props.winner}</h3> : <h3>???</h3>}</>;
 }
 
+const initialItemName = "";
+const itemNameReducer = (attributeName: string, action: Action) => {
+  switch (action.type) {
+    case "update":
+      return action.payload;
+    case "resetItem":
+      return initialItemName;
+    default:
+      throw new Error(`Unknown action type`);
+  }
+};
+
 function MainContent() {
+  const [itemName, itemDispatch] = useReducer(itemNameReducer, initialItemName);
+
+  const handleItemInput = (event: ChangeEvent<HTMLInputElement>) => {
+    itemDispatch({
+      type: "update",
+      payload: event.target.value,
+    });
+  };
+  const handleResetItem = () => {
+    itemDispatch({
+      type: "resetItem",
+    });
+  };
+
   const [winner, setWinner] = useState("");
   // need to place this node above elements useState but below winning state
   const winningNode = {
@@ -30,7 +56,6 @@ function MainContent() {
   const [elements, setElements] = useState<any[]>([winningNode]);
   const [attributeName, setAttributeName] = useState("");
   const [attributes, setAttributes] = useState<Attribute[]>([]);
-  const [itemName, setItemName] = useState("");
   const [items, setItems] = useState<Item[]>([]);
   const [itemAttributePairs, setItemAttributePairs] = useState<
     ItemAttributePair[]
@@ -155,7 +180,6 @@ function MainContent() {
         label: (
           <ItemNode
             name={itemName}
-            // attributes={attributes}
             itemAttributePairs={itemAttributePairs}
             setItemAttributePairs={setItemAttributePairs}
             itemId={newId}
@@ -176,7 +200,7 @@ function MainContent() {
     };
 
     setElements([...elements, element]);
-    setItemName("");
+    handleResetItem();
     setItems([...items, item]);
     addNewPairsAttribute(newId);
     addEdges(newId);
@@ -223,7 +247,7 @@ function MainContent() {
           <input
             type="text"
             value={itemName}
-            onChange={(e) => setItemName(e.target.value)}
+            onChange={handleItemInput}
             placeholder="E.g. Pizza"
             onKeyPress={(e) => {
               if (e.key === "Enter") {

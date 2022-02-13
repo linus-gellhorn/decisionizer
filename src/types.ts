@@ -35,3 +35,10 @@ export interface Edge {
   animated: boolean;
   style: { stroke: string };
 }
+
+export type Action =
+  | {
+      type: "update";
+      payload: string;
+    }
+  | { type: "resetItem" };
