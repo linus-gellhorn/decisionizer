@@ -202,6 +202,12 @@ function MainContent() {
             value={attributeName}
             onChange={(e) => setAttributeName(e.target.value)}
             placeholder="E.g. Tastiness"
+            onKeyPress={(e) => {
+              if (e.key === "Enter") {
+                console.log("pressed");
+                handleCreateAttributeNode();
+              }
+            }}
           />
           <button onClick={() => handleCreateAttributeNode()}>Submit</button>
         </div>
@@ -212,6 +218,12 @@ function MainContent() {
             value={itemName}
             onChange={(e) => setItemName(e.target.value)}
             placeholder="E.g. Pizza"
+            onKeyPress={(e) => {
+              if (e.key === "Enter") {
+                console.log("pressed");
+                handleCreateItemNode();
+              }
+            }}
           />
           <button onClick={() => handleCreateItemNode()}>Submit</button>
         </div>
