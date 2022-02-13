@@ -1,5 +1,7 @@
 h1 {
   text-align: center;
+  margin: 5px;
+  padding: 0;
 }
 
 .options {
@@ -12,4 +14,18 @@ h1 {
   width: 90%;
   margin: auto;
   border: solid black 3px;
+}
+
+.attributes,
+.items {
+  display: inline-block;
+  margin-right: 50px;
+  margin-left: 50px;
+}
+
+.winning-button {
+  display: block;
+  margin: 10px auto;
+  width: 150px;
+  height: 40px;
 }

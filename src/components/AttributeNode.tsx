@@ -1,8 +1,10 @@
 import { useState } from "react";
-import { Attribute } from "../types";
+import { AttributeNodeProps } from "../types";
 
-function AttributeNode(props: Attribute): JSX.Element {
+function AttributeNode(props: AttributeNodeProps): JSX.Element {
   const [weighting, setWeighting] = useState(50);
+
+  props.handleAttributeSlider(props.id, weighting);
 
   return (
     <>
