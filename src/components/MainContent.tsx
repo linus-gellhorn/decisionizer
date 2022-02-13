@@ -1,9 +1,10 @@
 import ReactFlow from "react-flow-renderer";
 import AttributeNode from "./AttributeNode";
 import React, { useState, useEffect } from "react";
-import { Attribute, Item, ItemAttributePair } from "../types";
+import { Attribute, Item, ItemAttributePair, Edge } from "../types";
 import ItemNode from "./ItemNode";
 import findWinner from "../utils/findWinner";
+import createEdge from "../utils/createEdge";
 
 export const AttributesContext = React.createContext<Attribute[]>([]);
 export const ItemAttributePairsContext = React.createContext<
@@ -54,6 +55,25 @@ function MainContent() {
   }, [items, setWinner]);
 
   // console.log(items);
+
+  function addEdges(id: string) {
+    const attributeItemEdges: Edge[] = [];
+    const itemOutputEdges: Edge[] = [];
+    for (let element of elements) {
+      if (element.type === "output")
+        itemOutputEdges.push(
+          createEdge(id, element.id, { stroke: "red" }, true)
+        );
+
+      if (element.type === "input")
+        attributeItemEdges.push(
+          createEdge(element.id, id, { stroke: "blue" }, false)
+        );
+    }
+    const newEdges = [...attributeItemEdges, ...itemOutputEdges];
+    setElements((arr) => arr.concat(newEdges));
+    // setElements([...elements, ...attributeItemEdges, ...itemOutputEdges]);
+  }
 
   function addNewItemAttributePairs(attributeId: string) {
     const arrOfItemIds = elements
@@ -151,6 +171,7 @@ function MainContent() {
     setItemName("");
     setItems([...items, item]);
     addNewPairsAttribute(newId);
+    addEdges(newId);
   }
 
   function handleAttributeSlider(id: string, newWeighting: number) {

@@ -27,3 +27,11 @@ export interface ItemAttributePair {
   attributeId: string;
   value: number;
 }
+
+export interface Edge {
+  id: string;
+  source: string;
+  target: string;
+  animated: boolean;
+  style: { stroke: string };
+}
