@@ -12,6 +12,7 @@ export const AttributesContext = React.createContext<Attribute[]>([]);
 export const ItemAttributePairsContext = React.createContext<
   ItemAttributePair[]
 >([]);
+export const WinnerContext = React.createContext("");
 
 function MainContent() {
   const [itemName, itemDispatch] = useReducer(itemNameReducer, initialItemName);
@@ -28,18 +29,20 @@ function MainContent() {
     });
   };
 
+  const [attributes, setAttributes] = useState<Attribute[]>([]);
   const [winner, setWinner] = useState("");
   const winningNode = {
     id: "0",
     type: "output",
-    data: { label: <WinningNode winner={winner} /> },
-    position: { x: 400, y: 550 },
+    data: { label: <WinningNode /> },
+    position: { x: 400, y: 400 },
+    draggable: true,
+    isHidden: true,
   };
 
   const [id, setId] = useState(1);
   const [elements, setElements] = useState<any[]>([winningNode]);
   const [attributeName, setAttributeName] = useState("");
-  const [attributes, setAttributes] = useState<Attribute[]>([]);
   const [items, setItems] = useState<Item[]>([]);
   const [itemAttributePairs, setItemAttributePairs] = useState<
     ItemAttributePair[]
@@ -51,6 +54,21 @@ function MainContent() {
       setWinner(winningItem);
     }
   }, [items, setWinner]);
+
+  useEffect(() => {
+    elements.shift();
+    const updatedWinningNode = {
+      id: "0",
+      type: "output",
+      data: { label: <WinningNode /> },
+      position: { x: 400, y: 400 + 65 * attributes.length },
+      draggable: true,
+      isHidden: false,
+    };
+    elements.unshift(updatedWinningNode);
+    setElements(elements);
+    console.log("called");
+  }, [elements, attributes.length]);
 
   function addAttributeEdgesLater(currentId: string) {
     let newEdges: Edge[] = [];
@@ -104,20 +122,6 @@ function MainContent() {
     }
   }
 
-  function handleGetWinner() {
-    const newId = (id + 1).toString();
-    setId(id + 1);
-
-    const element = {
-      id: newId,
-      type: "output",
-      data: { label: <WinningNode winner={winner} /> },
-      position: { x: 400, y: 550 },
-    };
-
-    setElements([...elements, element]);
-  }
-
   function handleCreateAttributeNode() {
     if (attributeName === "") {
       alert("Please input an attribute name");
@@ -141,7 +145,7 @@ function MainContent() {
       },
       position: {
         x: 100 + attributes.length * 250,
-        y: 50,
+        y: 30,
       },
     };
 
@@ -182,7 +186,7 @@ function MainContent() {
       },
       position: {
         x: 100 + items.length * 250,
-        y: 250,
+        y: 220,
       },
     };
 
@@ -215,7 +219,7 @@ function MainContent() {
     });
   }
 
-  const flowStyles = { height: 500 };
+  const flowStyles = { height: 600 };
 
   return (
     <>
@@ -252,17 +256,16 @@ function MainContent() {
         </div>
       </div>
       <br />
-      <button className="winning-button" onClick={handleGetWinner}>
-        Reveal winner!
-      </button>
       <div className="flowchart">
         <AttributesContext.Provider value={attributes}>
           <ItemAttributePairsContext.Provider value={itemAttributePairs}>
-            <ReactFlow
-              elements={elements}
-              style={flowStyles}
-              nodesDraggable={false}
-            />
+            <WinnerContext.Provider value={winner}>
+              <ReactFlow
+                elements={elements}
+                style={flowStyles}
+                nodesDraggable={false}
+              />
+            </WinnerContext.Provider>
           </ItemAttributePairsContext.Provider>
         </AttributesContext.Provider>
       </div>
