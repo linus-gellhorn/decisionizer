@@ -10,7 +10,7 @@ This is the GitHub repo for an app that helps you make decisions.
 
 #### [Technical architecture](https://whimsical.com/states-objects-decision-making-helper-58dy1nJusBt9NprdBjNeeR)
 
-#### [Deployed site](https://decision-making-helper.netlify.app/)
+#### [Deployed site](https://decisionizer.netlify.app/)
 
 ## App instructions
 

@@ -1,4 +1,4 @@
-import ReactFlow from "react-flow-renderer";
+import ReactFlow, { Background, Controls, MiniMap } from "react-flow-renderer";
 import AttributeNode from "./AttributeNode";
 import ItemNode from "./ItemNode";
 import WinningNode from "./WinningNode";
@@ -7,11 +7,13 @@ import { Attribute, Item, ItemAttributePair, Edge } from "../types";
 import findWinner from "../utils/findWinner";
 import createEdge from "../utils/createEdge";
 import { initialItemName, itemNameReducer } from "../utils/itemNameReducer";
+import { Button, TextField } from "@mui/material";
 
 export const AttributesContext = React.createContext<Attribute[]>([]);
 export const ItemAttributePairsContext = React.createContext<
   ItemAttributePair[]
 >([]);
+export const WinnerContext = React.createContext("");
 
 function MainContent() {
   const [itemName, itemDispatch] = useReducer(itemNameReducer, initialItemName);
@@ -28,19 +30,20 @@ function MainContent() {
     });
   };
 
+  const [attributes, setAttributes] = useState<Attribute[]>([]);
   const [winner, setWinner] = useState("");
-  // need to place this node above elements useState but below winning state
   const winningNode = {
     id: "0",
     type: "output",
-    data: { label: <WinningNode winner={winner} /> },
-    position: { x: 400, y: 550 },
+    data: { label: <WinningNode /> },
+    position: { x: 400, y: 400 },
+    draggable: true,
+    isHidden: true,
   };
 
   const [id, setId] = useState(1);
   const [elements, setElements] = useState<any[]>([winningNode]);
   const [attributeName, setAttributeName] = useState("");
-  const [attributes, setAttributes] = useState<Attribute[]>([]);
   const [items, setItems] = useState<Item[]>([]);
   const [itemAttributePairs, setItemAttributePairs] = useState<
     ItemAttributePair[]
@@ -52,6 +55,32 @@ function MainContent() {
       setWinner(winningItem);
     }
   }, [items, setWinner]);
+
+  useEffect(() => {
+    elements.shift();
+    const updatedWinningNode = {
+      id: "0",
+      type: "output",
+      data: { label: <WinningNode /> },
+      position: { x: 400, y: 400 + 65 * attributes.length },
+      draggable: true,
+      isHidden: false,
+    };
+    elements.unshift(updatedWinningNode);
+    setElements(elements);
+  }, [elements, attributes.length]);
+
+  function addAttributeEdgesLater(currentId: string) {
+    let newEdges: Edge[] = [];
+    for (let item of elements) {
+      if (item.type === "default") {
+        newEdges.push(
+          createEdge(currentId, item.id, { stroke: "blue" }, false)
+        );
+      }
+    }
+    setElements((arr) => arr.concat(newEdges));
+  }
 
   function addEdges(id: string) {
     const attributeItemEdges: Edge[] = [];
@@ -69,7 +98,6 @@ function MainContent() {
     }
     const newEdges = [...attributeItemEdges, ...itemOutputEdges];
     setElements((arr) => arr.concat(newEdges));
-    // setElements([...elements, ...attributeItemEdges, ...itemOutputEdges]);
   }
 
   function addNewItemAttributePairs(attributeId: string) {
@@ -94,25 +122,11 @@ function MainContent() {
     }
   }
 
-  function handleGetWinner() {
-    const newId = (id + 1).toString();
-    setId(id + 1);
-
-    const element = {
-      id: newId,
-      type: "output",
-      data: { label: <WinningNode winner={winner} /> },
-      position: { x: 400, y: 550 },
-    };
-
-    setElements([...elements, element]);
-    // setElements([
-    //   ...elements.filter((element) => element.type !== "output"),
-    //   element,
-    // ]);
-  }
-
   function handleCreateAttributeNode() {
+    if (attributeName === "") {
+      alert("Please input an attribute name");
+      return;
+    }
     const newId = (id + 1).toString();
     setId(id + 1);
 
@@ -131,7 +145,7 @@ function MainContent() {
       },
       position: {
         x: 100 + attributes.length * 250,
-        y: 50,
+        y: 30,
       },
     };
 
@@ -145,9 +159,14 @@ function MainContent() {
     setAttributes([...attributes, attribute]);
     setAttributeName("");
     addNewItemAttributePairs(newId);
+    addAttributeEdgesLater(newId);
   }
 
   function handleCreateItemNode() {
+    if (itemName === "") {
+      alert("Please input an item name");
+      return;
+    }
     const newId = (id + 1).toString();
     setId(id + 1);
 
@@ -167,7 +186,7 @@ function MainContent() {
       },
       position: {
         x: 100 + items.length * 250,
-        y: 250,
+        y: 220,
       },
     };
 
@@ -206,8 +225,12 @@ function MainContent() {
     <>
       <div className="options">
         <div className="attributes">
-          <h2>1. What attributes do you value?</h2>
-          <input
+          <h2>What attributes do you value?</h2>
+          <TextField
+            size="small"
+            id="outlined-basic"
+            label="Add attribute"
+            variant="outlined"
             type="text"
             value={attributeName}
             onChange={(e) => setAttributeName(e.target.value)}
@@ -218,11 +241,22 @@ function MainContent() {
               }
             }}
           />
-          <button onClick={() => handleCreateAttributeNode()}>Submit</button>
+          <Button
+            sx={{ mx: 1 }}
+            color="primary"
+            variant="contained"
+            onClick={() => handleCreateAttributeNode()}
+          >
+            Submit
+          </Button>
         </div>
         <div className="items">
-          <h2>2. What items do you want to compare?</h2>
-          <input
+          <h2>What items do you want to compare?</h2>
+          <TextField
+            size="small"
+            id="outlined-basic"
+            label="Add item"
+            variant="outlined"
             type="text"
             value={itemName}
             onChange={handleItemInput}
@@ -233,17 +267,32 @@ function MainContent() {
               }
             }}
           />
-          <button onClick={() => handleCreateItemNode()}>Submit</button>
+          <Button
+            sx={{ mx: 1 }}
+            color="primary"
+            variant="contained"
+            onClick={() => handleCreateItemNode()}
+          >
+            Submit
+          </Button>
         </div>
       </div>
       <br />
-      <button className="winning-button" onClick={handleGetWinner}>
-        Reveal winner!
-      </button>
       <div className="flowchart">
         <AttributesContext.Provider value={attributes}>
           <ItemAttributePairsContext.Provider value={itemAttributePairs}>
-            <ReactFlow elements={elements} style={flowStyles} />
+            <WinnerContext.Provider value={winner}>
+              <ReactFlow
+                elements={elements}
+                style={flowStyles}
+                nodesDraggable={false}
+                snapToGrid={true}
+              >
+                <MiniMap />
+                <Background />
+                <Controls />
+              </ReactFlow>
+            </WinnerContext.Provider>
           </ItemAttributePairsContext.Provider>
         </AttributesContext.Provider>
       </div>
