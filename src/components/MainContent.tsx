@@ -68,7 +68,6 @@ function MainContent() {
     };
     elements.unshift(updatedWinningNode);
     setElements(elements);
-    console.log("called");
   }, [elements, attributes.length]);
 
   function addAttributeEdgesLater(currentId: string) {
