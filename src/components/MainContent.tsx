@@ -119,6 +119,10 @@ function MainContent() {
   }
 
   function handleCreateAttributeNode() {
+    if (attributeName === "") {
+      alert("Please input an attribute name");
+      return;
+    }
     const newId = (id + 1).toString();
     setId(id + 1);
 
@@ -155,6 +159,10 @@ function MainContent() {
   }
 
   function handleCreateItemNode() {
+    if (itemName === "") {
+      alert("Please input an item name");
+      return;
+    }
     const newId = (id + 1).toString();
     setId(id + 1);
 
