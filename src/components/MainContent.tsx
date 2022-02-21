@@ -1,4 +1,4 @@
-import ReactFlow from "react-flow-renderer";
+import ReactFlow, { Background, Controls, MiniMap } from "react-flow-renderer";
 import AttributeNode from "./AttributeNode";
 import ItemNode from "./ItemNode";
 import WinningNode from "./WinningNode";
@@ -219,7 +219,7 @@ function MainContent() {
     });
   }
 
-  const flowStyles = { height: 600 };
+  const flowStyles = { height: 700 };
 
   return (
     <>
@@ -264,7 +264,12 @@ function MainContent() {
                 elements={elements}
                 style={flowStyles}
                 nodesDraggable={false}
-              />
+                snapToGrid={true}
+              >
+                <MiniMap />
+                <Background />
+                <Controls />
+              </ReactFlow>
             </WinnerContext.Provider>
           </ItemAttributePairsContext.Provider>
         </AttributesContext.Provider>
