@@ -1,7 +1,12 @@
 h1 {
   text-align: center;
   margin: 5px;
-  padding: 0;
+}
+
+.title-container {
+  margin: 10px;
+  display: flex;
+  justify-content: center;
 }
 
 .options {
@@ -14,6 +19,7 @@ h1 {
   width: 90%;
   margin: auto;
   border: solid black 3px;
+  border-radius: 3vmin;
 }
 
 .attributes,

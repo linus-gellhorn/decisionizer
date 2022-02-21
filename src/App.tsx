@@ -1,10 +1,16 @@
 import "./App.css";
 import MainContent from "./components/MainContent";
+import PsychologyIcon from "@mui/icons-material/Psychology";
 
 function App() {
   return (
     <>
-      <h1>Decision Making Helper</h1>
+      <div className="title-container">
+        <PsychologyIcon sx={{ color: "rgb(233, 30, 99)", fontSize: 40 }} />
+        <h1>Decisionizer </h1>
+        <PsychologyIcon sx={{ color: "rgb(233, 30, 99)", fontSize: 40 }} />
+      </div>
+
       <MainContent />
     </>
   );

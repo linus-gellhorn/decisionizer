@@ -7,6 +7,7 @@ import { Attribute, Item, ItemAttributePair, Edge } from "../types";
 import findWinner from "../utils/findWinner";
 import createEdge from "../utils/createEdge";
 import { initialItemName, itemNameReducer } from "../utils/itemNameReducer";
+import { Button, TextField } from "@mui/material";
 
 export const AttributesContext = React.createContext<Attribute[]>([]);
 export const ItemAttributePairsContext = React.createContext<
@@ -225,8 +226,12 @@ function MainContent() {
     <>
       <div className="options">
         <div className="attributes">
-          <h2>1. What attributes do you value?</h2>
-          <input
+          <h2>What attributes do you value?</h2>
+          <TextField
+            size="small"
+            id="outlined-basic"
+            label="Add attribute"
+            variant="outlined"
             type="text"
             value={attributeName}
             onChange={(e) => setAttributeName(e.target.value)}
@@ -237,11 +242,22 @@ function MainContent() {
               }
             }}
           />
-          <button onClick={() => handleCreateAttributeNode()}>Submit</button>
+          <Button
+            sx={{ mx: 1 }}
+            color="primary"
+            variant="contained"
+            onClick={() => handleCreateAttributeNode()}
+          >
+            Submit
+          </Button>
         </div>
         <div className="items">
-          <h2>2. What items do you want to compare?</h2>
-          <input
+          <h2>What items do you want to compare?</h2>
+          <TextField
+            size="small"
+            id="outlined-basic"
+            label="Add item"
+            variant="outlined"
             type="text"
             value={itemName}
             onChange={handleItemInput}
@@ -252,7 +268,14 @@ function MainContent() {
               }
             }}
           />
-          <button onClick={() => handleCreateItemNode()}>Submit</button>
+          <Button
+            sx={{ mx: 1 }}
+            color="primary"
+            variant="contained"
+            onClick={() => handleCreateItemNode()}
+          >
+            Submit
+          </Button>
         </div>
       </div>
       <br />
