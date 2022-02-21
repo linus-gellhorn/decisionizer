@@ -1,16 +1,16 @@
-# Decision Making Helper
+# Decisionizer
 
-This is the GitHub repo for an app that helps you make decisions.
+This is the GitHub repo for Decisionizer, an app to help you make decisions.
+
+[View the deployed site here](https://decisionizer.netlify.app/)
 
 ![Screenshot](screenshot.png)
 
-## Links
+## Other Links
 
 #### [UI Overview](https://whimsical.com/ui-decision-making-helper-CgGRuSAAHJFHFLqvoUZ5rp)
 
 #### [Technical architecture](https://whimsical.com/states-objects-decision-making-helper-58dy1nJusBt9NprdBjNeeR)
-
-#### [Deployed site](https://decisionizer.netlify.app/)
 
 ## App instructions
 
@@ -47,8 +47,6 @@ I decided to first create some dummy data, and then use it to fill out a (hard-c
 
 Here's a few issues I'm aware of but didn't want to go too over time to fix:
 
-- The slider inputs can not be changed via clicking and dragging the cursor (but can be clicked around / use arrow keys). It's currently inside an already draggable react flow node which is causing this issue. Potential fix idea would be to make the react flow nodes undraggable when this input is being clicked/focused on.
-- The winning node created by the 'Reveal winner!' button does not replace the original node, instead it just creates a new one in exactly the same position. A fix would be to have the clicking of the reveal button delete the original node from the elements list (and also match up the new edges accordingly)
 - Locally, but not on my deployed site, I am getting this warning to the console `Cannot update a component (MainContent) while rendering a different component (AttributeNode). To locate the bad setState() call inside AttributeNode, follow the stack trace as described in https://reactjs.org/link/setstate-in-render` - not sure on this one!
 
 ## Further implementations
@@ -56,4 +54,4 @@ Here's a few issues I'm aware of but didn't want to go too over time to fix:
 If I had more time, other than fixing the above, I would like to prioritise the following:
 
 - The node positions aren't properly responsive - the app currently looks best with around 3 attributes and 3 items
-- The item scores should be revealed in a similar way to the winning node. I don’t want to introduce bias (e.g. ‘Oh I actually prefer this, I’ll just adjust this attribute until it becomes the favourite)
+- The item scores should be revealed only after the user has completely finished setting the attributes. I don’t want to introduce bias (e.g. ‘Oh I actually prefer this, I’ll just adjust this attribute until it becomes the winner).

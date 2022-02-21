@@ -220,6 +220,12 @@ function MainContent() {
   }
 
   const flowStyles = { height: 700 };
+  const nodeStrokeColor = (node: any) => {
+    if (node.type === "input") return "blue";
+    if (node.type === "default") return "black";
+    if (node.type === "output") return "red";
+    return "gray";
+  };
 
   return (
     <>
@@ -288,7 +294,10 @@ function MainContent() {
                 nodesDraggable={false}
                 snapToGrid={true}
               >
-                <MiniMap />
+                <MiniMap
+                  nodeStrokeColor={nodeStrokeColor}
+                  nodeBorderRadius={5}
+                />
                 <Background />
                 <Controls />
               </ReactFlow>

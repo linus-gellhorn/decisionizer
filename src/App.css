@@ -20,6 +20,7 @@ h1 {
   margin: auto;
   border: solid black 3px;
   border-radius: 3vmin;
+  margin-bottom: 1vh;
 }
 
 .attributes,
