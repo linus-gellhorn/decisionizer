@@ -29,7 +29,6 @@ function MainContent() {
   };
 
   const [winner, setWinner] = useState("");
-  // need to place this node above elements useState but below winning state
   const winningNode = {
     id: "0",
     type: "output",
@@ -53,6 +52,18 @@ function MainContent() {
     }
   }, [items, setWinner]);
 
+  function addAttributeEdgesLater(currentId: string) {
+    let newEdges: Edge[] = [];
+    for (let item of elements) {
+      if (item.type === "default") {
+        newEdges.push(
+          createEdge(currentId, item.id, { stroke: "blue" }, false)
+        );
+      }
+    }
+    setElements((arr) => arr.concat(newEdges));
+  }
+
   function addEdges(id: string) {
     const attributeItemEdges: Edge[] = [];
     const itemOutputEdges: Edge[] = [];
@@ -69,7 +80,6 @@ function MainContent() {
     }
     const newEdges = [...attributeItemEdges, ...itemOutputEdges];
     setElements((arr) => arr.concat(newEdges));
-    // setElements([...elements, ...attributeItemEdges, ...itemOutputEdges]);
   }
 
   function addNewItemAttributePairs(attributeId: string) {
@@ -106,10 +116,6 @@ function MainContent() {
     };
 
     setElements([...elements, element]);
-    // setElements([
-    //   ...elements.filter((element) => element.type !== "output"),
-    //   element,
-    // ]);
   }
 
   function handleCreateAttributeNode() {
@@ -145,6 +151,7 @@ function MainContent() {
     setAttributes([...attributes, attribute]);
     setAttributeName("");
     addNewItemAttributePairs(newId);
+    addAttributeEdgesLater(newId);
   }
 
   function handleCreateItemNode() {
@@ -200,7 +207,7 @@ function MainContent() {
     });
   }
 
-  const flowStyles = { height: 700 };
+  const flowStyles = { height: 500 };
 
   return (
     <>
@@ -243,7 +250,11 @@ function MainContent() {
       <div className="flowchart">
         <AttributesContext.Provider value={attributes}>
           <ItemAttributePairsContext.Provider value={itemAttributePairs}>
-            <ReactFlow elements={elements} style={flowStyles} />
+            <ReactFlow
+              elements={elements}
+              style={flowStyles}
+              nodesDraggable={false}
+            />
           </ItemAttributePairsContext.Provider>
         </AttributesContext.Provider>
       </div>
